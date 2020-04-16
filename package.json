@@ -1,0 +1,30 @@
+{
+  "name": "villa_roots",
+  "version": "1.0.0",
+  "description": "Villa Roots Backend API",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remiodufuye/villa_roots_backend.git"
+  },
+  "keywords": [
+    "Villa",
+    "Rocks",
+    "Backend"
+  ],
+  "author": "Remi Odufuye",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/remiodufuye/villa_roots_backend/issues"
+  },
+  "homepage": "https://github.com/remiodufuye/villa_roots_backend#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "eslint": "^6.8.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  }
+}
