@@ -48,7 +48,7 @@ exports.resizeCourseImages = catchAsync(async (req, res, next) => {
         .resize(2000, 1333)
         .toFormat("jpeg")
         .jpeg({ quality: 90 })
-        .toFile(`public/img/tours/${filename}`);
+        .toFile(`public/img/courses/${filename}`);
 
       req.body.images.push(filename);
     })
@@ -112,7 +112,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
       $group: {
         _id: { $month: "$startDates" },
         numCourseStarts: { $sum: 1 },
-        tours: { $push: "$name" },
+        courses: { $push: "$name" },
       },
     },
     {

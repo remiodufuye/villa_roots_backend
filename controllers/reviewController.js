@@ -1,9 +1,8 @@
-const Review = require('./../models/reviewModel');
-// const catchAsync = require('./../utils/catchAsync');
-const factory = require('./handlerFactory');
+const Review = require("./../models/reviewModel");
+const factory = require("./handlerFactory");
 
-exports.setTourUserIds = (req, res, next) => {
-  if (!req.body.tour) req.body.tour = req.params.tourId;
+exports.setCourseUserIds = (req, res, next) => {
+  if (!req.body.course) req.body.course = req.params.courseId;
   if (!req.body.user) req.body.user = req.user.id;
   next();
 };

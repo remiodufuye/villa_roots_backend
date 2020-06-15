@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
-// const User = require('./userModel');
 
 const courseSchema = new mongoose.Schema(
   {
@@ -148,7 +147,7 @@ courseSchema.pre("save", function (next) {
 courseSchema.pre(/^find/, function (next) {
   // courseSchema.pre('find', function (next) {
   this.find({
-    secretTour: { $ne: true },
+    secretCourse: { $ne: true },
   });
   this.start = Date.now();
   next();
