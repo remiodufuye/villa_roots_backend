@@ -5,12 +5,12 @@ const reviewRouter = require("./reviewRoutes");
 
 const router = express.Router();
 
-router.use("/:tourId/reviews", reviewRouter);
+router.use("/:courseId/reviews", reviewRouter);
 
 router
   .route("/top-5-cheap")
   .get(courseController.aliasTopCourses, courseController.getAllCourses);
-router.route("/tour-stats").get(courseController.getCourseStats);
+router.route("/course-stats").get(courseController.getCourseStats);
 router
   .route("/monthly-plan/:year")
   .get(
