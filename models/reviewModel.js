@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
-const Tour = require('./tourModel');
+const mongoose = require("mongoose");
+const Course = require("./courseModel");
 
 const reviewSchema = new mongoose.Schema(
   {
     review: {
       type: String,
-      required: [true, 'Review Can Not Be Empty!!'],
+      required: [true, "Review Can Not Be Empty!!"],
     },
     rating: {
       type: Number,
@@ -16,15 +16,15 @@ const reviewSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    tour: {
+    course: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Tour',
-      required: [true, 'Review must belong to a Tour!!'],
+      ref: "Course",
+      required: [true, "Review must belong to a Course!!"],
     },
     user: {
       type: mongoose.Schema.ObjectId,
-      ref: 'User',
-      required: [true, 'Review must belong to a User!'],
+      ref: "User",
+      required: [true, "Review must belong to a User!"],
     },
   },
   {
@@ -33,35 +33,27 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
-reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+reviewSchema.index({ course: 1, user: 1 }, { unique: true });
 
 reviewSchema.pre(/^find/, function (next) {
-  // this.populate({
-  //   path: 'tour',
-  //   select: 'name',
-  // }).populate({
-  //   path: 'user',
-  //   select: 'name photo',
-  // });
-
   this.populate({
-    path: 'user',
-    select: 'name photo',
+    path: "user",
+    select: "name photo",
   });
 
   next();
 });
 
-reviewSchema.statics.calcAverageRatings = async function (tourId) {
+reviewSchema.statics.calcAverageRatings = async function (courseId) {
   const stats = await this.aggregate([
     {
-      $match: { tour: tourId },
+      $match: { course: courseId },
     },
     {
       $group: {
-        _id: '$tour',
+        _id: "$course",
         nRating: { $sum: 1 },
-        avgRating: { $avg: '$rating' },
+        avgRating: { $avg: "$rating" },
       },
     },
   ]);
@@ -69,21 +61,21 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
   // console.log(stats);
 
   if (stats.length > 0) {
-    await Tour.findByIdAndUpdate(tourId, {
+    await Course.findByIdAndUpdate(courseId, {
       ratingsQuantity: stats[0].nRating,
       ratingsAverage: stats[0].avgRating,
     });
   } else {
-    await Tour.findByIdAndUpdate(tourId, {
+    await Course.findByIdAndUpdate(courseId, {
       ratingsQuantity: 0,
       ratingsAverage: 4.5,
     });
   }
 };
 
-reviewSchema.post('save', function () {
+reviewSchema.post("save", function () {
   // This Points to current review
-  this.constructor.calcAverageRatings(this.tour);
+  this.constructor.calcAverageRatings(this.course);
 });
 
 reviewSchema.pre(/^findOneAnd/, async function (next) {
@@ -94,9 +86,9 @@ reviewSchema.pre(/^findOneAnd/, async function (next) {
 
 reviewSchema.post(/^findOneAnd/, async function (next) {
   //  await this.findOne() does not work here , query has already executed
-  await this.r.constructor.calcAverageRatings(this.r.tour);
+  await this.r.constructor.calcAverageRatings(this.r.course);
 });
 
-const Review = mongoose.model('Review', reviewSchema);
+const Review = mongoose.model("Review", reviewSchema);
 
 module.exports = Review;
