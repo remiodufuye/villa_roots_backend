@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
-// const User = require('./userModel');
 
 const courseSchema = new mongoose.Schema(
   {
@@ -144,24 +143,8 @@ courseSchema.pre("save", function (next) {
   next();
 });
 
-// courseSchema.pre('save', async function (next) {
-//   const guidesPromises = this.guides.map(async (id) => await User.findById(id));
-//   this.guides = await Promise.all(guidesPromises);
-//   next();
-// });
-// courseSchema.pre('save', function (next) {
-//   console.log('Will Save Document !!');
-//   next();
-// });
-
-// courseSchema.post('save', function (doc, next) {
-//   console.log(doc);
-//   next();
-// });
-
 // QUERY MIDDLEWARE
 courseSchema.pre(/^find/, function (next) {
-  // courseSchema.pre('find', function (next) {
   this.find({
     secretCourse: { $ne: true },
   });
@@ -181,15 +164,6 @@ courseSchema.post(/^find/, function (docs, next) {
   console.log(`The Query Took ${Date.now() - this.start} milliseconds!`);
   next();
 });
-
-// AGGREGATION MIDDLEWARE
-// courseSchema.pre('aggregate', function (next) {
-//   this.pipeline().unshift({
-//     $match: { secretCourse: { $ne: true } },
-//   });
-//   console.log(this.pipeline());
-//   next();
-// });
 
 const Course = mongoose.model("Course", courseSchema);
 
