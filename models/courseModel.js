@@ -107,7 +107,7 @@ const courseSchema = new mongoose.Schema(
         day: Number,
       },
     ],
-    guides: [
+    tutors: [
       {
         type: mongoose.Schema.ObjectId,
         ref: "User",
@@ -154,7 +154,7 @@ courseSchema.pre(/^find/, function (next) {
 
 courseSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "guides",
+    path: "tutors",
     select: "-__v -passwordChangedAt",
   });
   next();
